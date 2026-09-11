@@ -5,40 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>US Momentum — Stratejiler</title>
 <style>
-  :root {
-    --bg:#0a0e17;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;
-    --accent:#3b82f6;--accent2:#60a5fa;--text1:#e2e8f0;--text2:#94a3b8;
-    --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--radius:8px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text1);font-family:'Inter',system-ui,sans-serif;font-size:13px;}
-  nav{display:flex;align-items:center;gap:16px;padding:12px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
-  .nav-brand{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:1px;}
-  .nav-brand span{color:var(--text2);font-weight:400;}
-  .nav-link{color:var(--text2);text-decoration:none;padding:4px 10px;border-radius:4px;font-size:12px;}
-  .nav-link:hover,.nav-link.active{color:var(--text1);background:var(--bg3);}
-  .meta-bar{display:flex;gap:24px;align-items:center;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
-  .meta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
-  .meta-label{color:var(--text2);font-size:11px;} .meta-val{color:var(--text1);font-weight:600;font-size:11px;}
-  .strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 90px);}
-  .strategy-panel{padding:20px 24px;border-right:1px solid var(--border);}
-  .strategy-panel:last-child{border-right:none;}
-  .panel-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
-  .panel-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-  .icon-long{background:rgba(34,197,94,.15);}
-  .icon-short{background:rgba(239,68,68,.15);}
-  .panel-title{font-size:15px;font-weight:700;}
-  .panel-desc{color:var(--text2);font-size:11px;margin-top:2px;}
-  .panel-count{margin-left:auto;color:var(--text2);font-size:11px;}
-  table{width:100%;border-collapse:collapse;}
-  thead th{color:var(--text2);font-size:10px;font-weight:600;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
-  tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
-  tbody tr:hover{background:var(--bg3);}
-  td{padding:6px 8px;white-space:nowrap;}
-  .td-ticker{font-weight:700;color:var(--accent2);font-size:12px;}
-  .td-name{color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;font-size:11px;}
-  .td-sector{color:var(--text2);font-size:10px;}
-  @media(max-width:900px){.strategy-grid{grid-template-columns:1fr;}}
+:root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;
+  --accent:#3b82f6;--accent2:#60a5fa;--text1:#e2e8f0;--text2:#94a3b8;
+  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--radius:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text1);font-family:'Inter',system-ui,sans-serif;font-size:13px;}
+nav{display:flex;align-items:center;gap:16px;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-brand{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:1px;}
+.nav-brand span{color:var(--text2);font-weight:400;}
+.nav-link{color:var(--text2);text-decoration:none;padding:4px 10px;border-radius:4px;font-size:12px;}
+.nav-link:hover,.nav-link.active{color:var(--text1);background:var(--bg3);}
+.nav-right{margin-left:auto;font-size:11px;color:var(--text2);}
+
+/* UPDATE BAR */
+.update-bar{display:flex;align-items:center;gap:16px;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.upd-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;}
+.upd-next{font-size:11px;color:var(--text2);}
+.upd-next strong{color:var(--accent2);}
+
+/* STRATEGY CARDS */
+.strategy-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;padding:20px 24px;border-bottom:1px solid var(--border);}
+.s-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
+.s-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.s-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.s-icon-long{background:rgba(34,197,94,.15);}
+.s-icon-short{background:rgba(239,68,68,.15);}
+.s-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.s-desc{font-size:11px;color:var(--text2);line-height:1.6;}
+.s-formula{background:var(--bg3);border-radius:6px;padding:10px;margin:10px 0;font-size:11px;color:var(--text2);line-height:1.8;}
+.s-formula span{color:var(--text1);}
+.tier-row{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.tier-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.tier-s{background:rgba(34,197,94,.2);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.tier-a{background:rgba(59,130,246,.2);color:var(--accent2);border:1px solid rgba(59,130,246,.3);}
+.tier-desc{font-size:11px;color:var(--text2);}
+
+/* STRATEGY GRID */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.strategy-panel{padding:0 24px 24px;}
+.strategy-panel:first-child{border-right:1px solid var(--border);}
+.panel-header{display:flex;align-items:center;gap:10px;padding:16px 0 12px;border-bottom:1px solid var(--border);margin-bottom:0;}
+.panel-title{font-size:14px;font-weight:700;}
+.panel-count{margin-left:auto;color:var(--text2);font-size:11px;}
+
+table{width:100%;border-collapse:collapse;}
+thead th{color:var(--text2);font-size:10px;font-weight:600;padding:8px 8px;text-align:left;
+  border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:44px;background:var(--bg);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+tbody tr:hover{background:var(--bg3);}
+td{padding:7px 8px;white-space:nowrap;}
+.td-ticker{font-weight:700;color:var(--accent2);font-size:12px;}
+.td-name{color:var(--text2);max-width:130px;overflow:hidden;text-overflow:ellipsis;font-size:11px;}
+.td-sector{color:var(--text2);font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis;}
+.score-bar-wrap{width:60px;height:4px;background:var(--border);border-radius:2px;display:inline-block;vertical-align:middle;}
+.score-fill{height:100%;border-radius:2px;}
+.badge{font-size:10px;padding:2px 5px;border-radius:3px;font-weight:600;}
+.sig{font-size:9px;padding:1px 5px;border-radius:3px;border:1px solid;margin-right:2px;}
+.sig-green{color:var(--green);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.08);}
+.sig-red{color:var(--red);border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);}
+@media(max-width:900px){.strategy-grid,.strategy-cards{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -46,78 +71,141 @@
   <div class="nav-brand">US <span>MOMENTUM</span></div>
   <a href="index.html"      class="nav-link">Screener</a>
   <a href="strategies.html" class="nav-link active">Stratejiler</a>
+  <div class="nav-right">Wesley R. Gray — Quantitative Momentum</div>
 </nav>
-<div class="meta-bar">
-  <span class="meta-dot"></span>
-  <span class="meta-label">Güncelleme:</span>
-  <span class="meta-val" id="metaDate">—</span>
-  <span class="meta-label" style="margin-left:16px">Her Cuma kapanış sonrası güncellenir</span>
+
+<div class="update-bar">
+  <span class="upd-dot"></span>
+  <span style="font-size:12px">Son güncelleme: <strong id="metaDate" style="color:var(--accent2)">—</strong></span>
+  <span class="upd-next">Her Cuma kapanış sonrası güncellenir</span>
 </div>
+
+<!-- STRATEJI AÇIKLAMA KARTLARI -->
+<div class="strategy-cards">
+  <div class="s-card">
+    <div class="s-card-head">
+      <div class="s-icon s-icon-long">▲</div>
+      <div>
+        <div class="s-title" style="color:var(--green)">01 — Momentum Long</div>
+        <div class="s-desc">Gray metodolojisi: yüksek 12-1M + negatif FIP = en kaliteli momentum.</div>
+      </div>
+    </div>
+    <div class="s-formula">
+      <span style="color:var(--accent2)">ΔMom</span> = Mom(t) − Mom(t−1) → pozitif = ivme artıyor<br>
+      <span style="color:var(--accent2)">ΔFIP</span> = FIP(t) − FIP(t−1) → negatif = kalite artıyor
+    </div>
+    <div class="tier-row"><span class="tier-badge tier-s">S-Tier</span><span class="tier-desc">12-1M &gt; %50, FIP &lt; −0.10, 3 ay pozitif</span></div>
+    <div class="tier-row" style="margin-top:4px"><span class="tier-badge tier-a">A-Tier</span><span class="tier-desc">12-1M &gt; %20, FIP &lt; −0.05, 2 ay pozitif</span></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text2)">6-12 aylık elde tutma için tasarlanmış. Her Cuma güncellenir — ayın sonunu beklemeden giriş yapılabilir.</div>
+  </div>
+  <div class="s-card">
+    <div class="s-card-head">
+      <div class="s-icon s-icon-short">▼</div>
+      <div>
+        <div class="s-title" style="color:var(--red)">02 — Momentum Short</div>
+        <div class="s-desc">Zayıflayan momentum + kötüleşen ivme. Kısa vadeli (1-4 hafta) taktiksel kullanım.</div>
+      </div>
+    </div>
+    <div class="s-formula">
+      <span style="color:var(--red)">ΔMom &lt; 0</span> : momentum hızlanarak düşüyor<br>
+      <span style="color:var(--red)">ΔFIP &gt; 0</span> : kalite bozuluyor (spiky'leşiyor)
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text2)">Yalnızca 12-1M negatif hisseler gösterilir. Güçlü yukarı trendlerde short pozisyon listelenmez. ABD piyasasında short için margin hesabı ve borrow cost göz önünde bulundurulmalıdır.</div>
+  </div>
+</div>
+
+<!-- STRATEJI LİSTELERİ -->
 <div class="strategy-grid">
+  <!-- LONG -->
   <div class="strategy-panel">
     <div class="panel-header">
-      <div class="panel-icon icon-long">▲</div>
-      <div>
-        <div class="panel-title" style="color:var(--green)">Momentum Long</div>
-        <div class="panel-desc">12-1M pozitif · Aylık mom pozitif · FIP negatif (kaliteli)</div>
-      </div>
+      <span style="color:var(--green);font-size:18px">▲</span>
+      <div class="panel-title" style="color:var(--green)">Momentum Long</div>
       <div class="panel-count" id="longCount">— hisse</div>
     </div>
     <table>
       <thead><tr>
         <th>#</th><th>Ticker</th><th>Şirket</th><th>Sektör</th>
-        <th>12-1M</th><th>Ay Mom</th><th>Ay FIP</th>
+        <th>12-1M</th><th>Ay Mom</th><th>ΔFIP</th><th>Sinyal</th><th>Skor</th>
       </tr></thead>
       <tbody id="longBody"></tbody>
     </table>
   </div>
+  <!-- SHORT -->
   <div class="strategy-panel">
     <div class="panel-header">
-      <div class="panel-icon icon-short">▼</div>
-      <div>
-        <div class="panel-title" style="color:var(--red)">Momentum Short</div>
-        <div class="panel-desc">12-1M negatif · Aylık mom negatif ve düşüyor</div>
-      </div>
+      <span style="color:var(--red);font-size:18px">▼</span>
+      <div class="panel-title" style="color:var(--red)">Momentum Short</div>
       <div class="panel-count" id="shortCount">— hisse</div>
     </div>
     <table>
       <thead><tr>
         <th>#</th><th>Ticker</th><th>Şirket</th><th>Sektör</th>
-        <th>12-1M</th><th>Ay Mom</th><th>Ay FIP</th>
+        <th>12-1M</th><th>Ay Mom</th><th>ΔFIP</th><th>Sinyal</th><th>Skor</th>
       </tr></thead>
       <tbody id="shortBody"></tbody>
     </table>
   </div>
 </div>
-<script>
-const pct = v => v==null?'—':(v*100).toFixed(2)+'%';
-const fp  = v => v==null?'—':v.toFixed(4);
-const clrM= v => v==null?'':`color:${v>0?'var(--green)':v<0?'var(--red)':'var(--text2)'}`;
-const clrF= v => v==null?'':`color:${v<0?'var(--green)':v>0?'var(--red)':'var(--text2)'}`;
 
-async function init(){
+<script>
+const pct  = v => v==null?'—':(v>=0?'+':'')+(v*100).toFixed(2)+'%';
+const fp   = v => v==null?'—':v.toFixed(4);
+const clrM = v => v==null?'':`color:${v>0?'var(--green)':v<0?'var(--red)':'var(--text2)'}`;
+const clrF = v => v==null?'':`color:${v<0?'var(--green)':v>0?'var(--red)':'var(--text2)'}`;
+
+function scoreBar(score, max, color) {
+  const pct = Math.min(100, Math.round((score/max)*100));
+  return `<div class="score-bar-wrap"><div class="score-fill" style="width:${pct}%;background:${color}"></div></div> ${score.toFixed(1)}`;
+}
+
+function signals(s, isLong) {
+  const sigs = [];
+  if(isLong) {
+    if(s.delta_mom!=null && s.delta_mom>0) sigs.push('<span class="sig sig-green">ΔMom ↑</span>');
+    if(s.delta_fip!=null && s.delta_fip<0) sigs.push('<span class="sig sig-green">ΔFIP ↓ Kalite ↑</span>');
+    if(s.mom_12_1!=null  && s.mom_12_1>0)  sigs.push('<span class="sig sig-green">12-1M trend</span>');
+  } else {
+    if(s.delta_mom!=null && s.delta_mom<0) sigs.push('<span class="sig sig-red">ΔMom ↓</span>');
+    if(s.last_month_fip!=null && s.last_month_fip>0) sigs.push('<span class="sig sig-red">FIP bozuluyor</span>');
+  }
+  return sigs.join('');
+}
+
+async function init() {
   const d = await fetch('data/strategies.json').then(r=>r.json());
-  document.getElementById('metaDate').textContent = d.updated;
+  document.getElementById('metaDate').textContent   = d.updated;
   document.getElementById('longCount').textContent  = `${d.long_count} hisse`;
   document.getElementById('shortCount').textContent = `${d.short_count} hisse`;
 
-  document.getElementById('longBody').innerHTML = d.long.map((s,i)=>`
-    <tr><td style="color:var(--text2)">${i+1}</td>
-    <td class="td-ticker">${s.ticker}</td>
-    <td class="td-name">${s.name}</td>
-    <td class="td-sector">${s.sector||'—'}</td>
-    <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
-    <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
-    <td style="${clrF(s.last_month_fip)}">${fp(s.last_month_fip)}</td></tr>`).join('');
+  const maxLong  = d.long[0]?.score  || 100;
+  const maxShort = d.short[0]?.score || 100;
 
-  document.getElementById('shortBody').innerHTML = d.short.map((s,i)=>`
-    <tr><td style="color:var(--text2)">${i+1}</td>
-    <td class="td-ticker">${s.ticker}</td>
-    <td class="td-name">${s.name}</td>
-    <td class="td-sector">${s.sector||'—'}</td>
-    <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
-    <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
-    <td style="${clrF(s.last_month_fip)}">${fp(s.last_month_fip)}</td></tr>`).join('');
+  document.getElementById('longBody').innerHTML = d.long.map((s,i) => `
+    <tr>
+      <td style="color:var(--text2)">${i+1}</td>
+      <td class="td-ticker">${s.ticker}</td>
+      <td class="td-name" title="${s.name}">${s.name}</td>
+      <td class="td-sector" title="${s.sector||''}">${s.sector||'—'}</td>
+      <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
+      <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
+      <td style="${clrF(s.delta_fip)}">${s.delta_fip!=null?(s.delta_fip>=0?'+':'')+s.delta_fip.toFixed(4):'—'}</td>
+      <td>${signals(s,true)}</td>
+      <td>${scoreBar(s.score, maxLong, '#22c55e')}</td>
+    </tr>`).join('');
+
+  document.getElementById('shortBody').innerHTML = d.short.map((s,i) => `
+    <tr>
+      <td style="color:var(--text2)">${i+1}</td>
+      <td class="td-ticker">${s.ticker}</td>
+      <td class="td-name" title="${s.name}">${s.name}</td>
+      <td class="td-sector" title="${s.sector||''}">${s.sector||'—'}</td>
+      <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
+      <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
+      <td style="${clrF(s.delta_fip)}">${s.delta_fip!=null?(s.delta_fip>=0?'+':'')+s.delta_fip.toFixed(4):'—'}</td>
+      <td>${signals(s,false)}</td>
+      <td>${scoreBar(s.score, maxShort, '#ef4444')}</td>
+    </tr>`).join('');
 }
 init();
 </script>

@@ -5,100 +5,126 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>US Momentum Screener</title>
 <style>
-  :root {
-    --bg:      #0a0e17;
-    --bg2:     #111827;
-    --bg3:     #1a2235;
-    --border:  #1e2d45;
-    --accent:  #3b82f6;
-    --accent2: #60a5fa;
-    --text1:   #e2e8f0;
-    --text2:   #94a3b8;
-    --green:   #22c55e;
-    --red:     #ef4444;
-    --yellow:  #f59e0b;
-    --radius:  8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text1); font-family: 'Inter', system-ui, sans-serif; font-size: 13px; }
+:root {
+  --bg:#0a0e17; --bg2:#111827; --bg3:#1a2235; --border:#1e2d45;
+  --accent:#3b82f6; --accent2:#60a5fa; --text1:#e2e8f0; --text2:#94a3b8;
+  --green:#22c55e; --red:#ef4444; --yellow:#f59e0b; --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text1);font-family:'Inter',system-ui,sans-serif;font-size:13px;}
 
-  /* NAV */
-  nav { display: flex; align-items: center; gap: 16px; padding: 12px 24px;
-        background: var(--bg2); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-  .nav-brand { font-size: 15px; font-weight: 700; color: var(--accent2); letter-spacing: 1px; }
-  .nav-brand span { color: var(--text2); font-weight: 400; }
-  .nav-link { color: var(--text2); text-decoration: none; padding: 4px 10px; border-radius: 4px;
-              transition: color .2s; font-size: 12px; }
-  .nav-link:hover, .nav-link.active { color: var(--text1); background: var(--bg3); }
+/* NAV */
+nav{display:flex;align-items:center;gap:16px;padding:10px 24px;
+    background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-brand{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:1px;}
+.nav-brand span{color:var(--text2);font-weight:400;}
+.nav-link{color:var(--text2);text-decoration:none;padding:4px 10px;border-radius:4px;font-size:12px;transition:all .2s;}
+.nav-link:hover,.nav-link.active{color:var(--text1);background:var(--bg3);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+.nav-meta{font-size:11px;color:var(--text2);}
+.nav-meta span{color:var(--accent2);font-weight:600;}
 
-  /* META BAR */
-  .meta-bar { display: flex; gap: 24px; align-items: center; padding: 10px 24px;
-              background: var(--bg2); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 11px; }
-  .meta-dot  { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-  .meta-label { color: var(--text2); }
-  .meta-val   { color: var(--text1); font-weight: 600; }
+/* SUMMARY BAR */
+.summary-bar{display:flex;gap:0;background:var(--bg2);border-bottom:1px solid var(--border);}
+.sum-item{padding:12px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;min-width:120px;}
+.sum-item:last-child{border-right:none;}
+.sum-val{font-size:22px;font-weight:700;}
+.sum-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+.sum-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
 
-  /* FILTERS */
-  .filters { display: flex; gap: 10px; padding: 14px 24px; flex-wrap: wrap; align-items: center; }
-  input[type=text], select {
-    background: var(--bg2); border: 1px solid var(--border); color: var(--text1);
-    padding: 6px 10px; border-radius: var(--radius); font-size: 12px; outline: none;
-  }
-  input[type=text]:focus, select:focus { border-color: var(--accent); }
-  input[type=text] { width: 220px; }
-  .filter-count { color: var(--text2); font-size: 11px; margin-left: auto; }
+/* FILTERS */
+.filter-bar{display:flex;gap:8px;padding:12px 24px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);}
+input[type=text],select{background:var(--bg2);border:1px solid var(--border);color:var(--text1);
+  padding:6px 10px;border-radius:var(--radius);font-size:12px;outline:none;}
+input[type=text]:focus,select:focus{border-color:var(--accent);}
+input[type=text]{width:200px;}
+.filter-count{margin-left:auto;color:var(--text2);font-size:11px;}
+.view-toggle{display:flex;gap:4px;}
+.view-btn{padding:5px 12px;border:1px solid var(--border);background:transparent;color:var(--text2);
+  border-radius:4px;cursor:pointer;font-size:12px;transition:all .15s;}
+.view-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.dl-btn{padding:5px 12px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);
+  border-radius:4px;cursor:pointer;font-size:11px;text-decoration:none;transition:all .15s;}
+.dl-btn:hover{border-color:var(--accent);color:var(--accent2);}
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; padding: 0 24px 24px; }
-  table { width: 100%; border-collapse: collapse; min-width: 900px; }
-  thead th {
-    background: var(--bg2); color: var(--text2); font-size: 11px; font-weight: 600;
-    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border);
-    position: sticky; top: 45px; cursor: pointer; user-select: none; white-space: nowrap;
-  }
-  thead th:hover { color: var(--text1); }
-  tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; }
-  tbody tr:hover { background: var(--bg3); }
-  td { padding: 7px 10px; white-space: nowrap; }
-  .td-ticker { font-weight: 700; color: var(--accent2); font-size: 13px; }
-  .td-name   { color: var(--text2); max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
-  .td-sector { color: var(--text2); font-size: 11px; }
+/* TABLE */
+.table-wrap{overflow-x:auto;padding:0 24px 24px;}
+table{width:100%;border-collapse:collapse;min-width:1000px;}
+thead th{background:var(--bg2);color:var(--text2);font-size:11px;font-weight:600;
+  padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);
+  position:sticky;top:44px;cursor:pointer;user-select:none;white-space:nowrap;}
+thead th:hover{color:var(--text1);}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+tbody tr:hover{background:var(--bg3);}
+td{padding:7px 10px;white-space:nowrap;}
+.td-ticker{font-weight:700;color:var(--accent2);font-size:13px;}
+.td-name{color:var(--text2);max-width:160px;overflow:hidden;text-overflow:ellipsis;}
+.td-sector{color:var(--text2);font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis;}
 
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
-                   z-index: 200; overflow-y: auto; }
-  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
-  .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
-           width: 100%; max-width: 860px; padding: 28px; position: relative; }
-  .modal-close { position: absolute; top: 16px; right: 16px; background: var(--bg3);
-                 border: none; color: var(--text2); cursor: pointer; border-radius: 6px;
-                 padding: 4px 10px; font-size: 16px; }
-  .modal-close:hover { color: var(--text1); }
-  .modal-title  { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .modal-sub    { color: var(--text2); font-size: 12px; margin-bottom: 20px; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-  .kpi-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
-  .kpi-val  { font-size: 22px; font-weight: 700; }
-  .kpi-lbl  { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .month-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-  .m-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-            padding: 10px; font-size: 11px; }
-  .m-card-lbl { font-weight: 600; color: var(--accent2); margin-bottom: 6px; font-size: 10px; }
-  .m-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
-  .m-key { color: var(--text2); }
-  .partial-badge { font-size: 9px; background: rgba(245,158,11,.15); color: var(--yellow);
-                   border: 1px solid rgba(245,158,11,.3); border-radius: 3px; padding: 1px 4px; margin-left: 4px; }
+/* FIP HISTORY SPARKLINE */
+.fip-hist{display:flex;gap:2px;align-items:flex-end;height:18px;}
+.fip-bar{width:4px;border-radius:1px;min-height:2px;}
 
-  /* SCORE BAR */
-  .score-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 2px; }
-  .score-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+/* HEATMAP */
+.heatmap-wrap{padding:16px 24px 24px;display:none;}
+.heatmap-grid{display:flex;flex-wrap:wrap;gap:4px;}
+.hm-cell{padding:6px 8px;border-radius:5px;cursor:pointer;transition:opacity .15s;min-width:80px;
+  display:flex;flex-direction:column;gap:1px;}
+.hm-cell:hover{opacity:.8;}
+.hm-ticker{font-weight:700;font-size:12px;color:#fff;}
+.hm-val{font-size:10px;color:rgba(255,255,255,.8);}
 
-  /* RISK BADGE */
-  .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-  .badge-high   { background: rgba(239,68,68,.15);  color: var(--red);    border: 1px solid rgba(239,68,68,.3); }
-  .badge-normal { background: rgba(34,197,94,.1);   color: var(--green);  border: 1px solid rgba(34,197,94,.2); }
-  .badge-mid    { background: rgba(245,158,11,.15); color: var(--yellow); border: 1px solid rgba(245,158,11,.3); }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:200;overflow-y:auto;}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;padding:32px 16px;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  width:100%;max-width:900px;padding:28px;position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--bg3);border:none;
+  color:var(--text2);cursor:pointer;border-radius:6px;padding:4px 10px;font-size:16px;}
+.modal-close:hover{color:var(--text1);}
+.modal-title{font-size:20px;font-weight:700;margin-bottom:2px;}
+.modal-sub{color:var(--text2);font-size:12px;margin-bottom:16px;}
+.modal-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:8px;}
+.m-tab{padding:5px 14px;border:1px solid var(--border);background:transparent;color:var(--text2);
+  border-radius:4px;cursor:pointer;font-size:12px;transition:all .15s;}
+.m-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.kpi-val{font-size:22px;font-weight:700;}
+.kpi-lbl{font-size:10px;color:var(--text2);margin-top:2px;}
+.kpi-sub{font-size:10px;color:var(--green);margin-top:2px;}
+
+/* MONTH GRID */
+.month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+.m-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:11px;}
+.m-card-lbl{font-weight:600;color:var(--accent2);margin-bottom:6px;font-size:10px;
+  display:flex;align-items:center;gap:4px;}
+.m-row{display:flex;justify-content:space-between;margin-bottom:3px;}
+.m-key{color:var(--text2);}
+.m-bars{display:flex;gap:6px;margin-top:6px;font-size:10px;}
+.partial-badge{font-size:9px;background:rgba(245,158,11,.15);color:var(--yellow);
+  border:1px solid rgba(245,158,11,.3);border-radius:3px;padding:1px 4px;}
+
+/* DAILY TABLE */
+.daily-table{width:100%;border-collapse:collapse;}
+.daily-table th{color:var(--text2);font-size:11px;padding:6px 10px;text-align:left;
+  border-bottom:1px solid var(--border);}
+.daily-table td{padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.month-sel{background:var(--bg3);border:1px solid var(--border);color:var(--text1);
+  padding:5px 10px;border-radius:4px;font-size:12px;margin-bottom:12px;}
+
+/* DATA SOURCE */
+.datasource{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:12px;line-height:1.7;}
+.datasource h4{color:var(--accent2);margin-bottom:8px;font-size:13px;}
+.datasource p{color:var(--text2);margin-bottom:6px;}
+.datasource code{background:var(--bg);padding:1px 5px;border-radius:3px;color:var(--accent2);font-size:11px;}
+
+.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;}
+.badge-s{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.badge-a{background:rgba(59,130,246,.15);color:var(--accent2);border:1px solid rgba(59,130,246,.3);}
 </style>
 </head>
 <body>
@@ -107,28 +133,39 @@
   <div class="nav-brand">US <span>MOMENTUM</span></div>
   <a href="index.html"      class="nav-link active">Screener</a>
   <a href="strategies.html" class="nav-link">Stratejiler</a>
+  <div class="nav-right">
+    <span class="nav-meta">Wesley R. Gray — Quantitative Momentum &nbsp;·&nbsp; Son veri: <span id="navDate">—</span></span>
+  </div>
 </nav>
 
-<div class="meta-bar" id="metaBar">
-  <div class="meta-item"><div class="meta-dot"></div>
-    <span class="meta-label">Son güncelleme:</span>
-    <span class="meta-val" id="metaDate">—</span>
+<div class="summary-bar" id="summaryBar">
+  <div class="sum-item">
+    <div class="sum-val" id="sTotal">—</div>
+    <div class="sum-lbl">Toplam Hisse</div>
   </div>
-  <div class="meta-item">
-    <span class="meta-label">Toplam hisse:</span>
-    <span class="meta-val" id="metaTotal">—</span>
+  <div class="sum-item">
+    <div class="sum-val" style="color:var(--green)" id="sPosMom">—</div>
+    <div class="sum-lbl"><span class="sum-dot" style="background:var(--green)"></span>↑ Momentum</div>
   </div>
-  <div class="meta-item">
-    <span class="meta-label">Pozitif momentum:</span>
-    <span class="meta-val" id="metaPos">—</span>
+  <div class="sum-item">
+    <div class="sum-val" style="color:var(--red)" id="sNegMom">—</div>
+    <div class="sum-lbl"><span class="sum-dot" style="background:var(--red)"></span>↓ Momentum</div>
   </div>
-  <div class="meta-item">
-    <span class="meta-label">Kaliteli (FIP<0):</span>
-    <span class="meta-val" id="metaNeg">—</span>
+  <div class="sum-item">
+    <div class="sum-val" style="color:var(--green)" id="sNegFip">—</div>
+    <div class="sum-lbl">FIP Kaliteli (−)</div>
+  </div>
+  <div class="sum-item">
+    <div class="sum-val" style="color:var(--red)" id="sPosFip">—</div>
+    <div class="sum-lbl">FIP Düşük (+)</div>
   </div>
 </div>
 
-<div class="filters">
+<div class="filter-bar">
+  <div class="view-toggle">
+    <button class="view-btn active" id="btnTable" onclick="setView('table')">≡ Tablo</button>
+    <button class="view-btn" id="btnHeat"  onclick="setView('heat')">⊞ Isı Haritası</button>
+  </div>
   <input type="text" id="searchBox" placeholder="Ticker veya şirket ara...">
   <select id="sectorFilter"><option value="">Tüm sektörler</option></select>
   <select id="momFilter">
@@ -138,13 +175,16 @@
   </select>
   <select id="fipFilter">
     <option value="">Tüm FIP</option>
-    <option value="neg">Kaliteli (FIP < 0)</option>
-    <option value="pos">Zayıf (FIP > 0)</option>
+    <option value="neg">Kaliteli (FIP &lt; 0)</option>
+    <option value="pos">Zayıf (FIP &gt; 0)</option>
   </select>
   <span class="filter-count" id="filterCount"></span>
+  <a href="data/stocks.json" download class="dl-btn">↓ JSON</a>
+  <a id="csvLink" href="#" download="us_momentum.csv" class="dl-btn">↓ CSV</a>
 </div>
 
-<div class="table-wrap">
+<!-- TABLE VIEW -->
+<div class="table-wrap" id="tableView">
   <table id="mainTable">
     <thead>
       <tr>
@@ -152,16 +192,21 @@
         <th data-col="ticker">Ticker ↕</th>
         <th data-col="name">Şirket</th>
         <th data-col="sector">Sektör</th>
-        <th data-col="mom" class="sort-active">12-1M Mom ↓</th>
+        <th data-col="mom">12-1M Mom ↓</th>
         <th data-col="fip">Yıl FIP</th>
         <th data-col="lmom">Ay Mom</th>
         <th data-col="lfip">Ay FIP</th>
-        <th data-col="neg">NEG</th>
-        <th data-col="pos">POS</th>
+        <th data-col="neg">NEG/POS/FLAT</th>
+        <th>FIP Geçmişi</th>
       </tr>
     </thead>
     <tbody id="tableBody"></tbody>
   </table>
+</div>
+
+<!-- HEATMAP VIEW -->
+<div class="heatmap-wrap" id="heatView">
+  <div class="heatmap-grid" id="heatGrid"></div>
 </div>
 
 <!-- MODAL -->
@@ -170,18 +215,82 @@
     <button class="modal-close" id="modalClose">✕</button>
     <div class="modal-title" id="mTitle"></div>
     <div class="modal-sub"   id="mSub"></div>
+    <div class="modal-tabs">
+      <button class="m-tab active" onclick="showTab('monthly')">Aylık Özet</button>
+      <button class="m-tab"        onclick="showTab('daily')">Günlük Kapanış</button>
+      <button class="m-tab"        onclick="showTab('source')">Veri Kaynağı</button>
+    </div>
     <div class="kpi-grid" id="mKpi"></div>
-    <div class="month-grid" id="mMonths"></div>
+    <div id="tabMonthly"><div class="month-grid" id="mMonths"></div></div>
+    <div id="tabDaily"   style="display:none">
+      <select class="month-sel" id="monthSel" onchange="renderDaily()"></select>
+      <table class="daily-table"><thead><tr><th>Tarih</th><th>Günlük % Değişim</th><th>Durum</th></tr></thead>
+      <tbody id="dailyBody"></tbody></table>
+    </div>
+    <div id="tabSource"  style="display:none">
+      <div class="datasource">
+        <h4>📦 Veri kaynağı ve güncelleme mantığı</h4>
+        <p>Her gün saat 21:00 UTC'de GitHub Actions otomatik olarak çalışır ve şu işlemleri yapar:</p>
+        <p><strong style="color:var(--accent2)">1. Yeni kapanış verisi çekme</strong><br>
+        yfinance kütüphanesi ile NYSE/NASDAQ kapanış fiyatları alınır, günlük % değişim hesaplanır.</p>
+        <p><strong style="color:var(--accent2)">2. Excel güncelleme</strong><br>
+        Her hisse için yeni gün sütununa ham % değişim kaydedilir. (<code>US_Momentum_Screener.xlsx</code>)</p>
+        <p><strong style="color:var(--accent2)">3. Hesaplamalar</strong><br>
+        Python motoru (<code>engine_us.py</code>) Excel'den veriyi okur, 12-1M Momentum ve FIP değerlerini hesaplar.</p>
+        <p><strong style="color:var(--accent2)">4. Strateji listesi</strong><br>
+        Her Cuma kapanış sonrası Long/Short strateji listeleri güncellenir.</p>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-let allStocks = [], sortCol = 'mom', sortAsc = false;
+let allStocks=[], currentDetail=null, sortCol='mom', sortAsc=false, currentView='table';
 
-const pct  = v => v == null ? '—' : (v*100).toFixed(2)+'%';
-const fp   = v => v == null ? '—' : v.toFixed(4);
-const clrM = v => v == null ? '' : v > 0 ? 'color:var(--green)' : v < 0 ? 'color:var(--red)' : 'color:var(--text2)';
-const clrF = v => v == null ? '' : v < 0 ? 'color:var(--green)' : v > 0 ? 'color:var(--red)' : 'color:var(--text2)';
+const pct  = v => v==null?'—':(v>=0?'+':'')+( v*100).toFixed(2)+'%';
+const fp   = v => v==null?'—':v.toFixed(4);
+const clrM = v => v==null?'':v>0?'color:var(--green)':v<0?'color:var(--red)':'color:var(--text2)';
+const clrF = v => v==null?'':v<0?'color:var(--green)':v>0?'color:var(--red)':'color:var(--text2)';
+
+function heatColor(mom) {
+  if (mom == null) return '#1a2235';
+  if (mom >  0.5)  return '#166534';
+  if (mom >  0.2)  return '#15803d';
+  if (mom >  0.05) return '#16a34a';
+  if (mom >  0)    return '#22c55e55';
+  if (mom > -0.05) return '#ef444455';
+  if (mom > -0.2)  return '#dc2626';
+  return '#991b1b';
+}
+
+function fipSparkline(monthly) {
+  if (!monthly || monthly.length === 0) return '';
+  const vals = monthly.slice(-8).map(m => m.fip);
+  const max  = Math.max(...vals.map(Math.abs), 0.001);
+  return '<div class="fip-hist">' + vals.map(v => {
+    const h   = Math.max(2, Math.round(Math.abs(v||0)/max*16));
+    const clr = v == null ? '#334155' : v < 0 ? '#22c55e' : '#ef4444';
+    return `<div class="fip-bar" style="height:${h}px;background:${clr}"></div>`;
+  }).join('') + '</div>';
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('tableView').style.display = v==='table'?'block':'none';
+  document.getElementById('heatView').style.display  = v==='heat'?'block':'none';
+  document.getElementById('btnTable').classList.toggle('active', v==='table');
+  document.getElementById('btnHeat').classList.toggle('active',  v==='heat');
+  if (v==='heat') renderHeat();
+}
+
+function showTab(t) {
+  ['monthly','daily','source'].forEach(x => {
+    document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1)).style.display = x===t?'block':'none';
+  });
+  document.querySelectorAll('.m-tab').forEach((btn,i) =>
+    btn.classList.toggle('active', ['monthly','daily','source'][i]===t));
+  if (t==='daily') renderDaily();
+}
 
 async function init() {
   const [meta, stocks] = await Promise.all([
@@ -189,101 +298,120 @@ async function init() {
     fetch('data/stocks.json').then(r=>r.json()),
   ]);
 
-  document.getElementById('metaDate').textContent  = meta.last_updated;
-  document.getElementById('metaTotal').textContent = meta.total;
-  document.getElementById('metaPos').textContent   = meta.pos_mom;
-  document.getElementById('metaNeg').textContent   = meta.neg_fip;
+  document.getElementById('navDate').textContent  = meta.last_updated;
+  document.getElementById('sTotal').textContent   = meta.total;
+  document.getElementById('sPosMom').textContent  = meta.pos_mom;
+  document.getElementById('sNegMom').textContent  = meta.total - meta.pos_mom;
+  document.getElementById('sNegFip').textContent  = meta.neg_fip;
+  document.getElementById('sPosFip').textContent  = meta.total - meta.neg_fip;
 
   allStocks = stocks;
 
-  // Sektörler
   const sectors = [...new Set(stocks.map(s=>s.sector).filter(Boolean))].sort();
   const sel = document.getElementById('sectorFilter');
   sectors.forEach(s => { const o=document.createElement('option'); o.value=o.textContent=s; sel.appendChild(o); });
 
-  document.getElementById('searchBox').addEventListener('input', render);
-  document.getElementById('sectorFilter').addEventListener('change', render);
-  document.getElementById('momFilter').addEventListener('change', render);
-  document.getElementById('fipFilter').addEventListener('change', render);
-  document.querySelectorAll('th[data-col]').forEach(th => {
+  ['searchBox','sectorFilter','momFilter','fipFilter'].forEach(id =>
+    document.getElementById(id).addEventListener('input', render));
+  document.querySelectorAll('th[data-col]').forEach(th =>
     th.addEventListener('click', () => {
-      if (sortCol === th.dataset.col) sortAsc = !sortAsc;
-      else { sortCol = th.dataset.col; sortAsc = false; }
+      if(sortCol===th.dataset.col) sortAsc=!sortAsc;
+      else { sortCol=th.dataset.col; sortAsc=false; }
       render();
-    });
-  });
-
+    }));
   document.getElementById('modalClose').addEventListener('click', closeModal);
   document.getElementById('modalOverlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
+    if(e.target===document.getElementById('modalOverlay')) closeModal();
   });
-
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
   render();
 }
 
 function getVal(s, col) {
-  const lm = s.last_month, pm = s.prev_month;
+  const lm=s.last_month;
   switch(col) {
     case 'ticker': return s.ticker;
     case 'name':   return s.name;
-    case 'sector': return s.sector;
-    case 'mom':    return s.mom ?? -999;
-    case 'fip':    return s.fip ?? 999;
-    case 'lmom':   return lm?.momentum ?? -999;
-    case 'lfip':   return lm?.fip ?? 999;
-    case 'neg':    return lm?.neg_count ?? 0;
-    case 'pos':    return lm?.pos_count ?? 0;
+    case 'sector': return s.sector||'';
+    case 'mom':    return s.mom??-999;
+    case 'fip':    return s.fip??999;
+    case 'lmom':   return lm?.momentum??-999;
+    case 'lfip':   return lm?.fip??999;
+    case 'neg':    return lm?.neg_count??0;
     default:       return 0;
   }
 }
 
-function render() {
+function filtered() {
   const q  = document.getElementById('searchBox').value.toLowerCase();
   const sc = document.getElementById('sectorFilter').value;
   const mf = document.getElementById('momFilter').value;
   const ff = document.getElementById('fipFilter').value;
-
-  let list = allStocks.filter(s => {
-    if (q  && !s.ticker.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q)) return false;
-    if (sc && s.sector !== sc) return false;
-    if (mf === 'pos' && !(s.mom > 0)) return false;
-    if (mf === 'neg' && !(s.mom < 0)) return false;
-    if (ff === 'neg' && !(s.fip < 0)) return false;
-    if (ff === 'pos' && !(s.fip > 0)) return false;
+  return allStocks.filter(s => {
+    if(q  && !s.ticker.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q)) return false;
+    if(sc && s.sector!==sc) return false;
+    if(mf==='pos' && !(s.mom>0)) return false;
+    if(mf==='neg' && !(s.mom<0)) return false;
+    if(ff==='neg' && !(s.fip<0)) return false;
+    if(ff==='pos' && !(s.fip>0)) return false;
     return true;
   });
+}
 
+function render() {
+  let list = filtered();
   list.sort((a,b) => {
     const va=getVal(a,sortCol), vb=getVal(b,sortCol);
-    return sortAsc ? (va>vb?1:-1) : (va<vb?1:-1);
+    return sortAsc?(va>vb?1:-1):(va<vb?1:-1);
   });
-
   document.getElementById('filterCount').textContent = `${list.length} hisse`;
+
+  // CSV linki
+  const csv = ['Ticker,Name,Sector,12-1M Mom,Yil FIP,Ay Mom,Ay FIP']
+    .concat(list.map(s => [s.ticker, `"${s.name}"`, s.sector,
+      s.mom, s.fip, s.last_month?.momentum, s.last_month?.fip].join(','))).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  document.getElementById('csvLink').href = URL.createObjectURL(blob);
 
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = list.map((s,i) => {
-    const lm = s.last_month;
+    const lm=s.last_month;
+    const neg=lm?.neg_count??'—', pos=lm?.pos_count??'—', flt=lm?.flat_count??'—';
     return `<tr onclick="openModal('${s.ticker}')">
       <td style="color:var(--text2)">${i+1}</td>
       <td class="td-ticker">${s.ticker}</td>
-      <td class="td-name">${s.name}</td>
-      <td class="td-sector">${s.sector||'—'}</td>
+      <td class="td-name" title="${s.name}">${s.name}</td>
+      <td class="td-sector" title="${s.sector||''}">${s.sector||'—'}</td>
       <td style="${clrM(s.mom)}">${pct(s.mom)}</td>
       <td style="${clrF(s.fip)}">${fp(s.fip)}</td>
       <td style="${clrM(lm?.momentum)}">${pct(lm?.momentum)}</td>
       <td style="${clrF(lm?.fip)}">${fp(lm?.fip)}</td>
-      <td style="color:var(--red)">${lm?.neg_count??'—'}</td>
-      <td style="color:var(--green)">${lm?.pos_count??'—'}</td>
+      <td><span style="color:var(--red)">${neg}</span> · <span style="color:var(--green)">${pos}</span> · <span style="color:var(--text2)">${flt}</span></td>
+      <td>${fipSparkline(s.monthly_fip)}</td>
     </tr>`;
   }).join('');
+
+  if(currentView==='heat') renderHeat(list);
+}
+
+function renderHeat(list) {
+  list = list || filtered();
+  list.sort((a,b)=>(b.mom??-999)-(a.mom??-999));
+  document.getElementById('heatGrid').innerHTML = list.map(s =>
+    `<div class="hm-cell" style="background:${heatColor(s.mom)}" onclick="openModal('${s.ticker}')">
+      <div class="hm-ticker">${s.ticker}</div>
+      <div class="hm-val">${pct(s.mom)}</div>
+    </div>`).join('');
 }
 
 async function openModal(ticker) {
   const data = await fetch(`data/detail/${ticker}.json`).then(r=>r.json());
+  currentDetail = data;
   document.getElementById('mTitle').textContent = `${data.ticker} — ${data.name}`;
   document.getElementById('mSub').textContent   = `${data.type} · ${data.sector}`;
 
-  const lm = data.monthly.at(-1);
+  const lm = data.monthly?.at(-1);
+  const pm = data.monthly?.at(-2);
   document.getElementById('mKpi').innerHTML = `
     <div class="kpi-card">
       <div class="kpi-val" style="${clrM(data.mom)}">${pct(data.mom)}</div>
@@ -291,7 +419,7 @@ async function openModal(ticker) {
     </div>
     <div class="kpi-card">
       <div class="kpi-val" style="${clrF(data.fip)}">${fp(data.fip)}</div>
-      <div class="kpi-lbl">Yıllık FIP</div>
+      <div class="kpi-lbl">Yıllık FIP${data.fip!=null&&data.fip<0?'<div class="kpi-sub">✓ Kaliteli (smooth)</div>':''}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-val" style="${clrM(lm?.momentum)}">${pct(lm?.momentum)}</div>
@@ -302,20 +430,46 @@ async function openModal(ticker) {
       <div class="kpi-lbl">Aylık FIP</div>
     </div>`;
 
-  document.getElementById('mMonths').innerHTML = data.monthly.map(m => `
-    <div class="m-card" style="${m.is_partial?'border-color:rgba(245,158,11,.35)':''}">
+  document.getElementById('mMonths').innerHTML = (data.monthly||[]).map(m => `
+    <div class="m-card" style="${m.is_partial?'border-color:rgba(245,158,11,.4)':''}">
       <div class="m-card-lbl">${m.month}${m.is_partial?'<span class="partial-badge">⚡ Kısmi</span>':''}</div>
       <div class="m-row"><span class="m-key">Momentum</span><span style="${clrM(m.momentum)}">${pct(m.momentum)}</span></div>
       <div class="m-row"><span class="m-key">FIP</span><span style="${clrF(m.fip)}">${fp(m.fip)}</span></div>
-      <div class="m-row"><span class="m-key">Gün</span><span style="color:var(--text2)">${m.total_days}${m.is_partial?' (devam)':''}</span></div>
-      <div class="m-row"><span style="color:var(--red)">▼${m.neg_count}</span><span style="color:var(--green)">▲${m.pos_count}</span><span style="color:var(--text2)">=&nbsp;${m.flat_count}</span></div>
+      <div class="m-row"><span class="m-key">Toplam gün</span><span style="color:var(--text2)">${m.total_days}${m.is_partial?' (devam)':''}</span></div>
+      <div class="m-bars">
+        <span style="color:var(--red)">▼${m.neg_count}</span>
+        <span style="color:var(--green)">▲${m.pos_count}</span>
+        <span style="color:var(--text2)">=&nbsp;${m.flat_count}</span>
+      </div>
     </div>`).join('');
 
+  // Ay seçici
+  const sel = document.getElementById('monthSel');
+  sel.innerHTML = (data.monthly||[]).map(m=>`<option value="${m.month}">${m.month} (${m.total_days} gün)</option>`).join('');
+  sel.value = lm?.month || '';
+
+  showTab('monthly');
   document.getElementById('modalOverlay').classList.add('open');
+}
+
+function renderDaily() {
+  if(!currentDetail) return;
+  const month = document.getElementById('monthSel').value;
+  const m = currentDetail.monthly?.find(x=>x.month===month);
+  const days = m?.days || [];
+  document.getElementById('dailyBody').innerHTML = days.map(d => `
+    <tr>
+      <td>${d.date}</td>
+      <td style="${d.ret>0?'color:var(--green)':d.ret<0?'color:var(--red)':'color:var(--text2)'}">
+        ${d.ret>=0?'+':''}${(d.ret*100).toFixed(4)}%
+      </td>
+      <td>${d.ret>0?'<span style="color:var(--green)">▲</span>':d.ret<0?'<span style="color:var(--red)">▼</span>':'<span style="color:var(--text2)">—</span>'}</td>
+    </tr>`).join('');
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
+  currentDetail = null;
 }
 
 init();
