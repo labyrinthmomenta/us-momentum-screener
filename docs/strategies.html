@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Momentum — Stratejiler</title>
+<style>
+  :root {
+    --bg:#0a0e17;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;
+    --accent:#3b82f6;--accent2:#60a5fa;--text1:#e2e8f0;--text2:#94a3b8;
+    --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--radius:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text1);font-family:'Inter',system-ui,sans-serif;font-size:13px;}
+  nav{display:flex;align-items:center;gap:16px;padding:12px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+  .nav-brand{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:1px;}
+  .nav-brand span{color:var(--text2);font-weight:400;}
+  .nav-link{color:var(--text2);text-decoration:none;padding:4px 10px;border-radius:4px;font-size:12px;}
+  .nav-link:hover,.nav-link.active{color:var(--text1);background:var(--bg3);}
+  .meta-bar{display:flex;gap:24px;align-items:center;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+  .meta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
+  .meta-label{color:var(--text2);font-size:11px;} .meta-val{color:var(--text1);font-weight:600;font-size:11px;}
+  .strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 90px);}
+  .strategy-panel{padding:20px 24px;border-right:1px solid var(--border);}
+  .strategy-panel:last-child{border-right:none;}
+  .panel-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .panel-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .icon-long{background:rgba(34,197,94,.15);}
+  .icon-short{background:rgba(239,68,68,.15);}
+  .panel-title{font-size:15px;font-weight:700;}
+  .panel-desc{color:var(--text2);font-size:11px;margin-top:2px;}
+  .panel-count{margin-left:auto;color:var(--text2);font-size:11px;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{color:var(--text2);font-size:10px;font-weight:600;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+  tbody tr:hover{background:var(--bg3);}
+  td{padding:6px 8px;white-space:nowrap;}
+  .td-ticker{font-weight:700;color:var(--accent2);font-size:12px;}
+  .td-name{color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;font-size:11px;}
+  .td-sector{color:var(--text2);font-size:10px;}
+  @media(max-width:900px){.strategy-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">US <span>MOMENTUM</span></div>
+  <a href="index.html"      class="nav-link">Screener</a>
+  <a href="strategies.html" class="nav-link active">Stratejiler</a>
+</nav>
+<div class="meta-bar">
+  <span class="meta-dot"></span>
+  <span class="meta-label">Güncelleme:</span>
+  <span class="meta-val" id="metaDate">—</span>
+  <span class="meta-label" style="margin-left:16px">Her Cuma kapanış sonrası güncellenir</span>
+</div>
+<div class="strategy-grid">
+  <div class="strategy-panel">
+    <div class="panel-header">
+      <div class="panel-icon icon-long">▲</div>
+      <div>
+        <div class="panel-title" style="color:var(--green)">Momentum Long</div>
+        <div class="panel-desc">12-1M pozitif · Aylık mom pozitif · FIP negatif (kaliteli)</div>
+      </div>
+      <div class="panel-count" id="longCount">— hisse</div>
+    </div>
+    <table>
+      <thead><tr>
+        <th>#</th><th>Ticker</th><th>Şirket</th><th>Sektör</th>
+        <th>12-1M</th><th>Ay Mom</th><th>Ay FIP</th>
+      </tr></thead>
+      <tbody id="longBody"></tbody>
+    </table>
+  </div>
+  <div class="strategy-panel">
+    <div class="panel-header">
+      <div class="panel-icon icon-short">▼</div>
+      <div>
+        <div class="panel-title" style="color:var(--red)">Momentum Short</div>
+        <div class="panel-desc">12-1M negatif · Aylık mom negatif ve düşüyor</div>
+      </div>
+      <div class="panel-count" id="shortCount">— hisse</div>
+    </div>
+    <table>
+      <thead><tr>
+        <th>#</th><th>Ticker</th><th>Şirket</th><th>Sektör</th>
+        <th>12-1M</th><th>Ay Mom</th><th>Ay FIP</th>
+      </tr></thead>
+      <tbody id="shortBody"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+const pct = v => v==null?'—':(v*100).toFixed(2)+'%';
+const fp  = v => v==null?'—':v.toFixed(4);
+const clrM= v => v==null?'':`color:${v>0?'var(--green)':v<0?'var(--red)':'var(--text2)'}`;
+const clrF= v => v==null?'':`color:${v<0?'var(--green)':v>0?'var(--red)':'var(--text2)'}`;
+
+async function init(){
+  const d = await fetch('data/strategies.json').then(r=>r.json());
+  document.getElementById('metaDate').textContent = d.updated;
+  document.getElementById('longCount').textContent  = `${d.long_count} hisse`;
+  document.getElementById('shortCount').textContent = `${d.short_count} hisse`;
+
+  document.getElementById('longBody').innerHTML = d.long.map((s,i)=>`
+    <tr><td style="color:var(--text2)">${i+1}</td>
+    <td class="td-ticker">${s.ticker}</td>
+    <td class="td-name">${s.name}</td>
+    <td class="td-sector">${s.sector||'—'}</td>
+    <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
+    <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
+    <td style="${clrF(s.last_month_fip)}">${fp(s.last_month_fip)}</td></tr>`).join('');
+
+  document.getElementById('shortBody').innerHTML = d.short.map((s,i)=>`
+    <tr><td style="color:var(--text2)">${i+1}</td>
+    <td class="td-ticker">${s.ticker}</td>
+    <td class="td-name">${s.name}</td>
+    <td class="td-sector">${s.sector||'—'}</td>
+    <td style="${clrM(s.mom_12_1)}">${pct(s.mom_12_1)}</td>
+    <td style="${clrM(s.last_month_mom)}">${pct(s.last_month_mom)}</td>
+    <td style="${clrF(s.last_month_fip)}">${fp(s.last_month_fip)}</td></tr>`).join('');
+}
+init();
+</script>
+</body>
+</html>
