@@ -1,0 +1,38 @@
+name: US Momentum — İlk Veri Yükleme (Tek Seferlik)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Repo çek
+        uses: actions/checkout@v4
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bağımlılıkları yükle
+        run: pip install yfinance openpyxl
+
+      - name: 24 aylık veriyi çek
+        run: python fetch_initial.py
+
+      - name: Siteyi derle
+        run: python run.py
+
+      - name: Değişiklikleri kaydet
+        run: |
+          git config user.name  "US Momentum Bot"
+          git config user.email "bot@us-momentum.local"
+          git add docs/ run.log US_Momentum_Screener.xlsx fetch_initial.log
+          git diff --staged --quiet || git commit -m "🚀 İlk kurulum: $(date +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase --autostash origin main
+          git push
